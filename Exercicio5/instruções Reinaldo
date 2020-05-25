@@ -1,0 +1,27 @@
+Pessoal,
+
+Boa tarde.
+Com o objetivo de agilizar e uniformizar a geração de series temporais
+caóticas, desenvolvi os dois programas abaixo que podem ser utilizados
+para a geração das respectivas famílias estocásticas conforme
+objetivo do exercício 5.1.   
+Atentem para as faixas que devem ser utilizadas para
+geração das séries temporais.
+
+Logístico 1D:  
+rho: de 3.81 até 4.00
+
+Henon (logistico 2D): 
+a: de 1.350 até 1.420
+b: de 0.210 até 0.310
+
+Fora dessas faixas as series não são do tipo "noise"
+e, portanto, os atributos calculados para
+caracterizar cada familia irão comprometer as 
+analises de agrupamento com K-means.
+
+POR FAVOR, CONSIDEREM AS FAIXAS ACIMA. 
+AS FAIXAS QUE ESTÃO NA LISTA
+NÃO ESTÃO PRECISAS E PODEM PREJUDICAR AS 
+ANALISES DE AGRUPAMENTO.
+

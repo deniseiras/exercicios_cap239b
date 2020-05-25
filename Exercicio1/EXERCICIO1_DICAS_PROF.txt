@@ -1,0 +1,45 @@
+
+Olá Pessoal,
+ 
+
+boa tarde. Em virtude da dúvida de alguns alunos sobre a aplicação da K-means sobre as 8 supostas famílias  do exercício 1, eu sugiro que o melhor valor de K seja verificado no gráfico da variância dos clusters em função do valor de K.
+
+ 
+
+O melhor K será aquele para a redução máxima da variância, pois quando o K ótimo é encontrado, mesmo para outros valores de K, esse valor não se altera de forma significativa.  Na linguagem técnica, aparecerá um "cotovelo" ("elbow")  antes da convergência da redução da variância versus o numero de centróides de entrada (K). Incluam este gráfico no exercício, justificando o valor de K com maior poder de  agrupamento.
+
+ 
+
+Lembrando que a quantidade de centroides (K) do agrupamento é o parâmetro que representa o agrupamento. A distância ao quadrado entre cada ponto e o centroide é a variação que será minimizada pela função objetivo. O objetivo do algoritmo K-means é, portanto, encontrar esses pontos agrupados e seus respectivos centroides, reduzindo o erro total. Ou seja, o que os pontos de um dado agrupamento apresentam em comum é a mínima distancia a um dado centroide. A dúvida principal levantada pelos alunos é: como decidir o número ótimo de clusters ou seja o valor de K?
+
+ 
+
+Existem, pelo menos, dois métodos para encontrar o melhor K no K-means:
+
+Os métodos do "cotovelo” e  da  “silhueta”
+
+ 
+
+O método de cotovelo (elbow) é provavelmente o método mais conhecido (e mais simples) para determinar o número ideal de clusters. E funciona da seguinte maneira:
+
+Calcule cada cluster  calcule a soma dos erros quadráticos (SEQ), para diferentes valores de k, e escolha o k para o qual o SEQ se torna o primeiro a começar a diminuir. No gráfico do SEQ-versus-k, isso é visível como um “cotovelo". Infelizmente, nem sempre temos esses dados claramente agrupados. Isso significa que o cotovelo pode não estar nítido e bem definido.
+
+ 
+
+Note que:
+
+ 
+
+•O erro quadrático de cada ponto é o quadrado da distância do ponto a partir do centróide previsto do cluster.
+
+•A pontuação do SEQ é a soma desses erros quadrados para todos os pontos.
+
+•Qualquer métrica de distância como a Distância Euclidiana (Distância de Manhattan, por exemplo, pode ser usada).
+
+ 
+
+Se o algoritmo de K-means que você está usando não tem esse módulo, utilize o seguinte:
+
+ 
+
+https://gist.github.com/KhyatiMahendru/6bf974c16bb9ce2bb8e8deedac03b01d#file-elbow_method-py

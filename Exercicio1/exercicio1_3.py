@@ -2,7 +2,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # 1o período 2020
-# Autores: Denis Eiras e Cristiano Reis
+# Autores: Denis Eiras
 # 28/04/2020 - V1.0
 #
 # O exercício deve executar o algoritmo K-means para tentar agrupar classes nos espaços de parâmetros variância,
@@ -87,6 +87,9 @@ def analisador_k_means(df_momentos_familias, np_elem_norm, k, is_plotar, is_plot
 def k_means_e_metodo_do_cotovelo(nome_arq_saida_todos_momentos, k_array, metodos_do_cotovelo,
                                  is_plotar=True, is_plotar_momentos_3d=False):
     df_momentos_familias = pd.read_csv(nome_arq_saida_todos_momentos, sep=",")
+    df_momentos_familias = df_momentos_familias.apply(pd.to_numeric, errors='coerce')
+    df_momentos_familias = df_momentos_familias.dropna()
+    df_momentos_familias = df_momentos_familias.reset_index(drop=True)
     np_elem_norm = df_momentos_familias.to_numpy()
 
     # método distorcao_km_inertia - soma das distâncias ao quadrado

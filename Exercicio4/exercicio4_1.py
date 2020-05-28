@@ -2,7 +2,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # 1o período 2020
-# Autores: Denis Eiras e Cristiano Reis
+# Autores: Denis Eiras
 # 28/04/2020 - V1.0
 #
 # Considere duas das séries das famílias N8 dos exercícios anteriores. Classifique as mesmas no espaço de Cullen-Frey.

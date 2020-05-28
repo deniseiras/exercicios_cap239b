@@ -2,7 +2,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # 1o período 2020
-# Autores: Denis Eiras e Cristiano Reis
+# Autores: Denis Eiras
 # 28/04/2020 - V1.0
 #
 # O exercício em questão consiste em implementar uma função que permita ler um arquivo de uma série genérica, com

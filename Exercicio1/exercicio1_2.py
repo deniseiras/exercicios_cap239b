@@ -2,7 +2,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # 1o período 2020
-# Autores: Denis Eiras e Cristiano Reis
+# Autores: Denis Eiras
 # 28/04/2020 - V1.0
 #
 # O exercício consiste em ler os elementos gerados pelo exercício 1.1, normalizar os valores entre 0 e 1 e gerar:

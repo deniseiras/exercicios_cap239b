@@ -39,7 +39,7 @@
 # - arquivo csv de nome definido em "nome_arq_saida_todos_momentos", contendo os momentos estatísticos gerados em 2.
 # - arquivos contendo classes agrupadas nos espaços de parâmetros variância, assimetria e curtose, para cada k, de
 #   nomes "k_#.png", onde # é o número k, gerados em 3.
-# - arquivo com gráfico do cotovelo ("cotovelo.png"), gerado em 3.
+# - arquivo com gráficos do cotovelo, silhueta ou outros, de nome definidos pelo nome do método + ".png", gerado em 3.
 
 from Exercicio1.exercicio1_1 import gerador_de_sinais_aleatorios
 from Exercicio1.exercicio1_2 import gerador_de_momentos

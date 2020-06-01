@@ -36,7 +36,7 @@
 # Saídas:
 # - arquivos contendo classes agrupadas nos espaços de parâmetros variância, assimetria e curtose, para cada k, de
 #   nomes "k_#.png", onde # é o número k
-# - arquivo com gráfico do cotovelo ("cotovelo.png")
+# - arquivo com gráficos do cotovelo, silhueta ou outros, de nome definidos pelo nome do método + ".png".
 
 
 import matplotlib.pyplot as plt

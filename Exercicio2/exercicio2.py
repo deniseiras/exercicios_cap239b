@@ -43,6 +43,7 @@
 # - is_plotar_histograma_familia: (Boolean) True para plotar um histograma exemplo de um sinal da cada família
 # - is_plotar_kmeans_cotovelo: (Boolean) True para plotar os gráficos de agrupamento para cada k e o gráfico do cotovelo
 # - is_plotar_sinal_familia: (Boolean) True para plotar o gráfico log log de densidade do Power Sptectrum
+# - is_plotar_momentos_3d: (Boolean) True para plotar os gráficos com os momentos estatísticos em 3 dimensões
 #
 # Saídas:
 #
@@ -50,14 +51,13 @@
 # - arquivo csv de nome definido em "nome_arq_saida_todos_momentos", contendo os momentos estatísticos gerados em 2.
 # - arquivos contendo classes agrupadas nos espaços de parâmetros variância, assimetria e curtose, para cada k, de
 #   nomes "k_#.png", onde # é o número k, gerados em 3.
-# - arquivo com gráfico do cotovelo ("cotovelo.png"), gerado em 3.
+# - arquivo com gráficos do cotovelo, silhueta ou outros, de nome definidos pelo nome do método + ".png", gerado em 3.
 
 
-import pandas as pd
-
-import Exercicio2.colorednoise as cn
 from Exercicio1.exercicio1_2 import gerador_de_momentos
 from Exercicio1.exercicio1_3 import k_means_e_metodo_do_cotovelo
+import Exercicio2.colorednoise as cn
+import pandas as pd
 
 
 def gerador_de_sinais_colored_noise(num_valores_por_sinal, num_sinais, nome_arquivo_colorednoise, betas,
@@ -104,10 +104,10 @@ if __name__ == '__main__':
                            'calinski_harabasz_yellowbrick']
     nome_arq_saida_todos_momentos = './momentos_das_familias.csv'
     is_normalizar_valores = False
-    is_plotar_histograma_familia = True
-    is_plotar_kmeans_cotovelo = True
-    is_plotar_sinal_familia = True
-    is_plotar_momentos_3d = True
+    is_plotar_histograma_familia = False
+    is_plotar_kmeans_cotovelo = False
+    is_plotar_sinal_familia = False
+    is_plotar_momentos_3d = False
     # ============================================================================
 
     gerador_de_sinais_colored_noise(num_valores_por_sinal, num_sinais, nome_arquivo_colorednoise, betas,

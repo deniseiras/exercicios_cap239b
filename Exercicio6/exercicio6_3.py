@@ -29,8 +29,8 @@ def calcula_df_estatistico(df_covid, coluna_agrupadora_covid, grupos_a_rejeitar,
         df_covid_grupo = df_covid[is_df_covid_grupo]
         serie = df_covid_grupo[coluna_serie_covid]
         df_serie = pd.DataFrame()
-        # df_serie['variancia_ao_quadrado'] = pd.Series(serie.var() ** 2)
-        df_serie['variancia_ao_quadrado'] = pd.Series(serie.var())
+        df_serie[coluna_agrupadora_covid] = pd.Series(str(grupo))
+        df_serie['variancia_ao_quadrado'] = serie.var() ** 2
         df_serie['curtose'] = serie.kurtosis()
         alfa, vetoutput, x, y, reta, erro = dfa1d(serie, 1)
         df_serie['alfa'] = alfa
@@ -44,23 +44,25 @@ def serie_no_espaco_param(df_covid, coluna_agrupadora_covid, grupos_a_rejeitar, 
                           arr_momentos_estat, k_array, metodos_do_cotovelo, is_plotar_kmeans):
     df_estatistico_completo = calcula_df_estatistico(df_covid, coluna_agrupadora_covid, grupos_a_rejeitar,
                                                      coluna_serie_covid)
-    df_estatistico = df_estatistico_completo[arr_momentos_estat]
     nome_arq_momentos_estat = './momentos_estat_{}.csv'.format(label_espaco_param)
-    df_estatistico.to_csv(nome_arq_momentos_estat, index=False)
-    k_means_e_metodo_do_cotovelo(nome_arq_momentos_estat, k_array, metodos_do_cotovelo, is_plotar_kmeans)
+    df_estatistico_completo.to_csv(nome_arq_momentos_estat, index=False)
+
+    df_estatistico = df_estatistico_completo[arr_momentos_estat]
+    nome_arq_momentos_estat_dummy = './momentos_estat_dummy.csv'
+    df_estatistico.to_csv(nome_arq_momentos_estat_dummy, index=False)
+    k_means_e_metodo_do_cotovelo(nome_arq_momentos_estat_dummy, k_array, metodos_do_cotovelo, is_plotar_kmeans)
     for k in k_array:
         shutil.move('./k_{}.png'.format(k), './{}_k_{}.png'.format(label_espaco_param, k))
-        shutil.move('./silhueta_yellowbrick__k_{}.png'.format(k), './silhueta_yellowbrick__{}_k_{}.png.'.format(label_espaco_param, k))
+        shutil.move('./silhueta_yellowbrick__k_{}.png'.format(k), './silhueta_yellowbrick__{}_k_{}.png'.format(label_espaco_param, k))
     shutil.move('./distorcao_yellowbrick.png', './distorcao_yellowbrick__{}.png'.format(label_espaco_param))
-
-    # os.remove(nome_arq_momentos_estat_dummy)
+    os.remove(nome_arq_momentos_estat_dummy)
 
 
 # início do programa principal
 if __name__ == '__main__':
 
     # Parâmetros de entrada ===========================================================================================
-    k_array = range(2, 11)
+    k_array = range(2, 21)
     metodos_do_cotovelo = ['distorcao_yellowbrick', 'silhueta_yellowbrick']
     is_plotar_kmeans = False
 
@@ -68,9 +70,9 @@ if __name__ == '__main__':
     url_owid_covid_data = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
     # nome arquivo covid a salvar
     nome_arq_covid_completo = './owid-covid-data.csv'
-    coluna_agrupadora_covid = 'iso_code'
+    coluna_agrupadora_covid = 'location'
     coluna_serie_covid = 'new_cases'
-    grupos_a_rejeitar = ['OWID_WRL']
+    grupos_a_rejeitar = ['International', 'World']
     # =================================================================================================================
 
     if is_atualizar_arquivo_covid:

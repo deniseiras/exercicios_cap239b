@@ -70,15 +70,13 @@ def plot_histograma_e_gev(str_fam_sinal, df_sinais, c, loc, scale, num_inicio, n
 if __name__ == '__main__':
     num_total = 100
 
-    # execute o programa, que irá executar o trecho abaixo para encontrar melhores parametros c, loc e scale,
-    # num_inicio, num_final, num_total. O prompt solicitará esses parâmtetros. Vá executando até conseguir ajustar ao
-    # histograma.
+    # Para descobrir os parâmetros da curva PDF, execute o somente o trecho abaixo para encontrar melhores parametros c,
+    # loc e scale, num_inicio, num_final, num_total. O prompt solicitará esses parâmtetros. Vá executando até conseguir
+    # ajustar ao histograma.
+
     # ========INICIO=================================================================================================
-    # nome_arquivo = './sinais_endogenos.csv'
+    # nome_arquivo = './sinais_teste.csv'
     # while True:
-    #     # c = 0.2
-    #     # loc = 1.0
-    #     # scale = 1.0
     #     c = float(input("c:"))
     #     loc = float(input("loc:"))
     #     scale = float(input("scale:"))

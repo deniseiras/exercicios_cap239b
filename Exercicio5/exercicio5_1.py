@@ -5,7 +5,11 @@
 # Autores: Denis Eiras
 # 28/04/2020 - V1.0
 #
-# O exercício 3 consiste em
+# 5.1. A partir do Mapeamento Logístico e do Mapeamento de Henon gere 2 famílias de series Temporais com 30 séries em
+# cada uma. Para a família logística varie o parâmetro ρ na faixa (3.85 a 4.05). Paragerar a família Henon varie os
+# parâmetros a e b nas respectivas faixas: (de 1.350 a 1.420) e (0.210-0.310). Por exemplo: pode fixar o a=1.40 e
+# variar o b. Pode fixar o b=0.300 e variar o a. Ou variar ambos dentro de um critério de passo ou aleatoriamente.
+# Aplique as respectivas analises estatísticas dos exercícios 4.1 e 4.2. Total do Grupo chaosnoise: 60
 #
 # Entradas:
 #
@@ -27,11 +31,11 @@
 # Reinaldo R. Rosa - LABAC-INPE
 # Version 1.0 for CAP239-2020
 
-# TODO - checar se henon a série está em y mesm
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from Exercicio4.cullen_frey_andre_from_R import graph
 from Exercicio4.exercicio4_2_1 import plot_histograma_e_gev
 
 
@@ -123,48 +127,63 @@ if __name__ == '__main__':
     valores_por_sinal = 8192
     # ============================================================================
 
-    df_sinais = gerador_de_sinais_logisticos(num_sinais, valores_por_sinal)
-    plot_histograma_e_gev('Logistic_Chaotic_Noise', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
-    # plt.plot(df_sinais["valor"].to_numpy())
-    # plt.title("Logistic Chaotic Noise")
-    # plt.ylabel("Valores de Amplitude: A(t)")
-    # plt.xlabel("N passos no tempo")
-    # plt.show()
-    # graph(df_sinais['valor'], boot=100)
 
+    # Para descobrir os parâmetros da curva PDF, execute o somente o trecho abaixo para encontrar melhores parametros c,
+    # loc e scale, num_inicio, num_final, num_total. O prompt solicitará esses parâmtetros. Vá executando até conseguir
+    # ajustar ao histograma.
 
-
-
-    # execute o programa, que irá executar o trecho abaixo para encontrar melhores parametros c, loc e scale,
-    # num_inicio, num_final, num_total. O prompt solicitará esses parâmtetros. Vá executando até conseguir ajustar ao
-    # histograma. Faça para log noise e henon noise
     # ========INICIO=================================================================================================
-    while True:
-        loc = 1.0
-        # c = 0.2
-        # scale = 1.0
-        # num_inicio = 0.01
-        # num_final = 0.99
-        # num_total = 100
-        c = float(input("c"))
+    # nome_arquivo = './sinais_teste.csv'
+    # df_sinais = pd.read_csv(nome_arquivo)
+    # while True:
+        # c = float(input("c"))
         # loc = float(input("loc"))
-        scale = float(input("scale"))
-        num_inicio = float(input('num inicial'))
-        num_final = float(input('num_final'))
-        num_total = int(input('num_total'))
+        # scale = float(input("scale"))
+        # num_inicio = float(input('num inicial'))
+        # num_final = float(input('num_final'))
+        # num_total = int(input('num_total'))
 
-        plot_histograma_e_gev('Logistic_Chaotic_Noise', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
+        # plot_histograma_e_gev('TIPO_SERIE', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
     # ========FIM=================================================================================================
 
+    # Sinais Logísticos ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    nome_arquivo = './resultados_5_1/sinais_log.csv'
 
+    # geração dos sinais - somente 1 vez
+    # df_sinais = gerador_de_sinais_logisticos(num_sinais, valores_por_sinal)
+    # df_sinais.to_csv(nome_arquivo)
 
+    # leitura dos sinais
+    df_sinais = pd.read_csv(nome_arquivo)
 
-    df_sinais = gerador_de_sinais_henon(num_sinais, valores_por_sinal)
-
-    plt.plot(df_sinais["valor"].to_numpy())
-    plt.title("Henon Chaotic Noise")
-    plt.ylabel("Valores de Amplitude: A(t)")
-    plt.xlabel("N passos no tempo")
-    plt.show()
+    # mostra espaço de Cullen-Frey
     graph(df_sinais['valor'], boot=100)
-    plot_histograma_e_gev('Henon_Chaotic_Noise', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
+
+    # ajusta curva ao histograma
+    c = 6
+    loc = 1.0
+    scale = 0.5
+    num_inicio = 0.0
+    num_final = 1.0
+    num_total = 100
+    plot_histograma_e_gev('Logistic Chaotic Noise', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
+
+    # Sinais Henon ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    nome_arquivo = './resultados_5_1/sinais_henon.csv'
+    # geração dos sinais - somente 1 vez
+    # df_sinais = gerador_de_sinais_henon(num_sinais, valores_por_sinal)
+    # df_sinais.to_csv(nome_arquivo)
+
+    # leitura dos sinais
+    df_sinais = pd.read_csv(nome_arquivo)
+
+    # mostra espaço de Cullen-Frey
+    graph(df_sinais['valor'], boot=100)
+
+    # ajusta curva ao histograma
+    c = 0.5
+    loc = 0.1
+    scale = 0.15
+    num_inicio = -0.4
+    num_final = 0.4
+    plot_histograma_e_gev('Henon Chaotic Noise', df_sinais, c, loc, scale, num_inicio, num_final, num_total)

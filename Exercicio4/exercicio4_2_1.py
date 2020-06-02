@@ -10,10 +10,23 @@
 #
 # Métodos utilizados:
 #
+# scipy.stats.genextreme
+#
+# https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.genextreme.html
+#
 # Entradas:
 #
+# - nome_arquivo: (String) nome do arquivo com os sinais a serem plotados
+# Parâmetros para geração da PDF e ajuste do histograma:
+# - c: (Float) Parâmetro da forma da distribuição
+# - loc: (Float) Parâmetro de Localização
+# - scale: (Float) Parâmetro de Escala
+# - num_inicio: (Float) Início da PDF
+# - num_final:(Float) Fim da PDF
 #
 # Saídas:
+#
+# Figura com plot do histograma e curva GEV ajustada
 #
 
 import numpy as np
@@ -29,17 +42,17 @@ def plot_histograma_e_gev(str_fam_sinal, df_sinais, c, loc, scale, num_inicio, n
     width = 0.7 * (bins_edge[1] - bins_edge[0])
     center = (bins_edge[:-1] + bins_edge[1:]) / 2
 
-    #plot histograma
+    # plot histograma
     # fig, ax = plt.subplots(1, 1)
     fig, ax1 = plt.subplots()
     color = 'tab:blue'
     plt.bar(center, histogram, align='center', width=width)
-    plt.title('Histograma da {}'.format(str_fam_sinal))
+    plt.title('Histograma da Série {}'.format(str_fam_sinal))
     plt.xlabel("bin")
     plt.ylabel("Quantidade")
     ax1.tick_params(axis='y', labelcolor=color)
 
-    # plot GEV
+    # plot PDF
     ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
     color = 'tab:ref'
     x = np.linspace(genextreme.ppf(0.01, c), genextreme.ppf(0.99, c), 100)
@@ -55,52 +68,42 @@ def plot_histograma_e_gev(str_fam_sinal, df_sinais, c, loc, scale, num_inicio, n
 
 # início do programa principal
 if __name__ == '__main__':
-
-    # white noise
-    betas = [0]
-    nome_arquivo_colorednoise = './white_noise.csv'
-    df_sinais = pd.read_csv(nome_arquivo_colorednoise)
+    num_total = 100
 
     # execute o programa, que irá executar o trecho abaixo para encontrar melhores parametros c, loc e scale,
     # num_inicio, num_final, num_total. O prompt solicitará esses parâmtetros. Vá executando até conseguir ajustar ao
-    # histograma. Faça para white noise e pmodel
+    # histograma.
     # ========INICIO=================================================================================================
-    while True:
-        # c = 0.2
-        # loc = 1.0
-        # scale = 1.0
-        c = float(input("c"))
-        loc = float(input("loc"))
-        scale = float(input("scale"))
-        num_inicio = float(input('num inicial'))
-        num_final = float(input('num_final'))
-        num_total = int(input('num_total'))
-
-        plot_histograma_e_gev('White_Noise', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
+    # nome_arquivo = './sinais_endogenos.csv'
+    # while True:
+    #     # c = 0.2
+    #     # loc = 1.0
+    #     # scale = 1.0
+    #     c = float(input("c:"))
+    #     loc = float(input("loc:"))
+    #     scale = float(input("scale:"))
+    #     num_inicio = float(input('num inicial:'))
+    #     num_final = float(input('num final:'))
+    #     plot_histograma_e_gev('TIPO_SERIE', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
     # ========FIM=================================================================================================
 
-
-
-
-
-    # white noise
-    # c = 0.2
-    # loc = 1.0
-    # scale = 1.0
-    # num_inicio = 0.01
-    # num_final = 0.99
-    # num_total = 100
-    nome_arquivo_colorednoise = './white_noise.csv'
-    df_sinais = pd.read_csv(nome_arquivo_colorednoise)
-    plot_histograma_e_gev('White_Noise', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
+    # pmodel - série endógena
+    nome_arquivo = './resultados_4_1/sinais_endogenos.csv'
+    df_sinais = pd.read_csv(nome_arquivo)
+    c = 0.3
+    loc = -1.0
+    scale = 1.0
+    num_inicio = -1.0
+    num_final = 10.0
+    plot_histograma_e_gev('P-Model Endógeno', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
 
     # pmodel - série exógena
-    # c = 0.2
-    # loc = 1.0
-    # scale = 1.0
-    # num_inicio = 0.01
-    # num_final = 0.99
-    # num_total = 100
-    nome_arquivo_pmodel = './sinais_ppmodel.csv'
-    df_sinais = pd.read_csv(nome_arquivo_pmodel)
+    nome_arquivo = './resultados_4_1/sinais_exogenos.csv'
+    df_sinais = pd.read_csv(nome_arquivo)
+    c = 0.2
+    loc = 0
+    scale = 1.0
+    num_inicio = 1.0
+    num_final = 50.0
+    df_sinais = pd.read_csv(nome_arquivo)
     plot_histograma_e_gev('P-Model exógeno', df_sinais, c, loc, scale, num_inicio, num_final, num_total)

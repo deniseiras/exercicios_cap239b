@@ -21,6 +21,7 @@
 
 import numpy as np
 
+
 def ler_serie_generica_de_arquivo_ou_url(nome_arquivo_ou_url, is_url=False, is_obter_csv_como_dataframe=False):
     import mimetypes
     import pandas as pd
@@ -95,18 +96,20 @@ def converter_array_para_valor(arr_linha, arr_serie):
 
 # início do programa principal
 if __name__ == '__main__':
-
-
     # serie texto
-    serie = ler_serie_generica_de_arquivo_ou_url('../Exercicio6/surftemp504.txt')
+    serie = ler_serie_generica_de_arquivo_ou_url('./resultados4_2_2/surftemp504.txt')
     print(serie)
 
     # serie texto, com extensão diferente
-    serie = ler_serie_generica_de_arquivo_ou_url('../Exercicio6/sol3ghz.dat')
+    serie = ler_serie_generica_de_arquivo_ou_url('./resultados_4_2_2/sol3ghz.dat')
     print(serie)
 
     # serie csv
-    serie = ler_serie_generica_de_arquivo_ou_url('./pink_noise.csv')
+    serie = ler_serie_generica_de_arquivo_ou_url('./resultados_4_2_2/teste_noise.csv')
+    print(serie)
+
+    # serie csv para DataFrame
+    serie = ler_serie_generica_de_arquivo_ou_url('./resultados_4_2_2/teste_noise.csv', is_obter_csv_como_dataframe=True)
     print(serie)
 
     # binário não lê
@@ -114,11 +117,11 @@ if __name__ == '__main__':
     print(serie)
 
     # texto com cabecalho
-    serie = ler_serie_generica_de_arquivo_ou_url('./arq_texto_2_colunas_sem_cabecalho')
+    serie = ler_serie_generica_de_arquivo_ou_url('./resultados_4_2_2/arq_texto_2_colunas_sem_cabecalho')
     print(serie)
 
     # texto sem cabecalho
-    serie = ler_serie_generica_de_arquivo_ou_url('./arq_texto_2_colunas_com_cabecalho')
+    serie = ler_serie_generica_de_arquivo_ou_url('./resultados_4_2_2/arq_texto_2_colunas_com_cabecalho')
     print(serie)
 
     # url
@@ -127,6 +130,3 @@ if __name__ == '__main__':
     print(serie)
 
     exit(0)
-
-
-

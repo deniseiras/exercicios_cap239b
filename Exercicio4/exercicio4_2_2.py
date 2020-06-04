@@ -18,6 +18,9 @@
 #
 # Saídas:
 #
+# Array contendo série gerérica, sendo uma dimensão para cada coluna, ou um Pandas DataFrame.
+#
+# TODO - Ler JSON, XML, EXCEL
 
 import numpy as np
 

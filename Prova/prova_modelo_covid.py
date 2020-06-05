@@ -61,7 +61,7 @@ def inicializa_medias_e_g_no_periodo(g_espectro_inicial, n_nb7, n_k, num_dias_pa
     for t in range(indice_inicial, indice_final + 1):
         calcula_media_dia(n_nb7, n_k, num_dias_para_media, t)
         # calcula g
-        g_espectro_inicial[t] = calcula_g_estrategia(n_nb7[t - 1], n_k[t], estrategia_g, g_fixo, prob_agent,
+        g_espectro_inicial[t] = calcula_g_estrategia(n_nb7, n_k, t, estrategia_g, g_fixo, prob_agent,
                                                      fator_n_min, fator_n_max,
                                                      g_atual)
         print(" Para casos = {}, media = {} ====> g = {}".format(n_k[t], n_nb7[t], g))
@@ -69,21 +69,26 @@ def inicializa_medias_e_g_no_periodo(g_espectro_inicial, n_nb7, n_k, num_dias_pa
     return n_nb7, g_espectro_inicial
 
 
-def calcula_g_estrategia(n_nb7_t, n_k_t, estrategia_g='Media', g_fixo=None, prob_agent=None, fator_n_min=None,
+def calcula_g_estrategia(n_nb7, n_k, t, estrategia_g='Media', g_fixo=None, prob_agent=None, fator_n_min=None,
                          fator_n_max=None, g_atual=None):
     if estrategia_g == 'Media':
+        n_k_t = n_k[t]
+        n_nb7_t = n_nb7[t-1]
         if n_k_t > n_nb7_t:
             # formula 6
             g = n_nb7_t / n_k_t
         else:
-            # formula 7
-            g = n_k_t / n_nb7_t
+            if n_nb7_t == 0:
+                g = 0
+            else:
+                # formula 7
+                g = n_k_t / n_nb7_t
     elif estrategia_g == 'Fixo':
         g = g_fixo
     elif estrategia_g == 'Ajuste':
-        # Calculando o valor minimo do intervalo
+        n_k_t = n_k[t]
+        n_nb7_t = n_nb7[t-1]
         n8_min = calcula_extremos(prob_agent, fator_n_min, n_k_t, g_atual)
-        # Calculando o valor maximo do intervalo
         n8_max = calcula_extremos(prob_agent, fator_n_max, n_k_t, g_atual)
         n_k_t_ajuste = (n8_min + n8_max) / 2
         if n_k_t_ajuste > n_nb7_t:
@@ -126,7 +131,7 @@ if __name__ == '__main__':
 
     N = 20
     # Estratégias => Media, Fixo, Ajuste
-    estrategia_g = 'Media'
+    estrategia_g = 'Ajuste'
     # Estratégias => Media , Fixo, Ajuste. Média faz mais sentido com casos reais
     estrategia_g_inicializacao = 'Media'
     g_fixo = 0.25
@@ -198,14 +203,14 @@ if __name__ == '__main__':
                                                                          g_fixo=g_fixo, prob_agent=prob_agent_norm,
                                                                          fator_n_min=fator_n_min,
                                                                          fator_n_max=fator_n_max, g_atual=g0)
-        # loop t = 0 = today to N days
+        # loop t = ultimo dia de caso real até data_final
         for t in range(num_dias_inicializacao - 1, N + num_dias_inicializacao):
 
             print('Previsão de hoje + {} dias ... ~~~~~~~~~~~~~~~~~~~~~~~~~~~'.format(t - num_dias_inicializacao + 1))
             print('{} = {}'.format(coluna_serie_covid, n_k[t]))
 
-            # calcula g com a media anterior
-            g[espectro_a_executar][t] = calcula_g_estrategia(n_nb7[t - 1], n_k[t], estrategia_g=estrategia_g,
+            # calcula g de acordo com a estrategia
+            g[espectro_a_executar][t] = calcula_g_estrategia(n_nb7, n_k, t, estrategia_g=estrategia_g,
                                                              g_fixo=g_fixo,
                                                              prob_agent=prob_agent_norm, fator_n_min=fator_n_min,
                                                              fator_n_max=fator_n_max,
@@ -238,12 +243,10 @@ if __name__ == '__main__':
 
             # calcula número de casos médio, para amanhã
             n_k[t + 1] = (n8_min + n8_max) / 2
-
+            g0 = g[espectro_a_executar][t]
             # calcula média móvel, para amanhã, dos últimos dias
             calcula_media_dia(n_nb7, n_k, num_dias_para_media, t + 1)
 
-            # TODO atualizar g0 ?
-            g0 = g[espectro_a_executar][t]
 
         # plot previsto e media
         fig = plt.figure(figsize=(16, 9))

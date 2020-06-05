@@ -83,11 +83,14 @@ def calcula_g_estrategia(n_nb7_t, n_k_t, estrategia_g='Media', g_fixo=None, prob
         n8_min = calcula_extremos(prob_agent, fator_n_min, n_k_t, g_atual)
         # Calculando o valor maximo do intervalo
         n8_max = calcula_extremos(prob_agent, fator_n_max, n_k_t, g_atual)
-        n_k_t_tomorrow = (n8_min + n8_max) / 2
-        if n_k_t_tomorrow > n_nb7_t:
-            g = n_nb7_t / n_k_t_tomorrow
+        n_k_t_ajuste = (n8_min + n8_max) / 2
+        if n_k_t_ajuste > n_nb7_t:
+            g = n_nb7_t / n_k_t_ajuste
         else:
-            g = n_k_t_tomorrow / n_nb7_t
+            if n_nb7_t == 0:
+                g = 0
+            else:
+                g = n_k_t_ajuste / n_nb7_t
     else:
         raise Exception('Estratégia inexistente')
     return g
@@ -110,23 +113,20 @@ if __name__ == '__main__':
 
     coluna_agrupadora_covid = 'location'
     coluna_serie_covid = 'new_cases'
-    valor_coluna_agrupador = 'Bolivia'
     coluna_data = 'date'
 
-    # média de 7 dias
-    data_inicial = '2020-05-09'
+    # Rodada prova
+    valor_coluna_agrupador = 'Bolivia'
     num_dias_para_media = 7
-
-    # teste com média de 15 dias
-    # data_inicial = '2020-05-01'
-    # num_dias_para_media = 15
-
-    data_inicial_previsao = '2020-05-16'
+    data_inicial = '2020-05-09'
     data_final = '2020-06-05'
-    N = 20
+    data_inicial_previsao = '2020-05-16'
 
+    N = 20
     # Estratégias => Media, Fixo, Ajuste
     estrategia_g = 'Ajuste'
+    # Estratégias => Media , Fixo, Ajuste. Média faz mais sentido com casos reais
+    estrategia_g_inicializacao = 'Media'
     g_fixo = 0.25
     g0 = 0.2  # 0.2 0.5 0.8
 
@@ -166,8 +166,6 @@ if __name__ == '__main__':
     df_covid_pais_datas_inicializacao = df_covid_pais.loc[mascara_data]
     num_dias_inicializacao = len(df_covid_pais_datas_inicializacao)
 
-    # número de casos no dia - depois são adicionados os dias de inicialização no início da lista  ...
-    n_k = [0.0] * (N + 1)
 
     s = {}
     g = {}
@@ -177,10 +175,6 @@ if __name__ == '__main__':
         # dicionario de fator g, por espectro
         g[espectro] = [0.0] * (N + num_dias_inicializacao + 1)
 
-    # média de "num_dias_para_media" dias no dia
-    n_nb7 = [0.0] * (N + 1 + num_dias_inicializacao)
-    # ... adicionados os dias de inicialização no início da lista
-    n_k = df_covid_pais_datas_inicializacao[coluna_serie_covid].to_list() + n_k
     n_k_real = df_covid_pais_real[coluna_serie_covid].to_list()
 
     # executa para cada espectro de probabilidades
@@ -188,10 +182,16 @@ if __name__ == '__main__':
         # normalizacao
         prob_agent_norm = np.array(prob_agent[espectro_a_executar]) / np.sum(prob_agent[espectro_a_executar])
 
-        # inicializa médias e g com estrategia de ajuste
+        # número de casos no dia - depois são adicionados os dias de inicialização no início da lista
+        n_k = [0.0] * (N + 1)
+        n_k = df_covid_pais_datas_inicializacao[coluna_serie_covid].to_list() + n_k
+
+        # média de "num_dias_para_media" dias no dia
+        n_nb7 = [0.0] * (N + 1 + num_dias_inicializacao)
+        # inicializa médias e g com estrategia de inicializacao
         n_nb7[0] = n_k[0]
         n_nb7, g[espectro_a_executar] = inicializa_medias_e_g_no_periodo(g[espectro_a_executar], n_nb7, n_k, num_dias_para_media, 1, num_dias_inicializacao - 1,
-                                                     estrategia_g=estrategia_g, g_fixo=g_fixo, prob_agent=prob_agent_norm,
+                                                     estrategia_g=estrategia_g_inicializacao, g_fixo=g_fixo, prob_agent=prob_agent_norm,
                                                      fator_n_min=fator_n_min, fator_n_max=fator_n_max, g_atual=g0)
         # loop t = 0 = today to N days
         for t in range(num_dias_inicializacao - 1, N + num_dias_inicializacao):

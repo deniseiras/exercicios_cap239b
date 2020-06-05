@@ -25,7 +25,6 @@
 # - nome_arquivo_sinais_exogenos: Arquivo de saída dos sinais exógenos gerados
 #
 
-from Exercicio2.exercicio2 import gerador_de_sinais_colored_noise
 from Exercicio3.exercicio3 import gerador_de_sinais_pmodel
 from Exercicio4.cullen_frey_andre_from_R import graph
 

@@ -225,7 +225,6 @@ def dfa1d(timeSeries, grau):
 
     return slope, vetoutput, x, y, predict_y, pred_error
 
-
 # ---------------------------------------------------------------------
 
 # Trecho principal

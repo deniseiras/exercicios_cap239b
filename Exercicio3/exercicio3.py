@@ -98,8 +98,8 @@ if __name__ == '__main__':
     nome_arquivo_figura_sinais_endo = 'sinais_endogenos.png'
     nome_arquivo_figura_sinais_exo = 'sinais_exogenos.png'
     nome_arq_saida_todos_momentos = './momentos_pmodel.csv'
-    metodos_do_cotovelo = ['distorcao_km_inertia'] #, 'silhueta_yellowbrick'] #, 'distorcao_yellowbrick',
-        # 'calinski_harabasz_yellowbrick']
+    metodos_do_cotovelo = ['distorcao_km_inertia']  # , 'silhueta_yellowbrick'] #, 'distorcao_yellowbrick',
+    # 'calinski_harabasz_yellowbrick']
     k_array = range(2, 7)
     is_normalizar_valores = False
     is_plotar_histograma_familia = False

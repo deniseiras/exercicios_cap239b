@@ -40,8 +40,8 @@ from Exercicio4.exercicio4_2_1 import plot_histograma_e_gev
 
 
 # chaotic logistic map is f(x) = rho*x*(1-x)  with rho in (3.81,4.00)
-def Logistic(rho,tau,x,y):
-    return rho*x*(1.0-x), tau*x
+def Logistic(rho, tau, x, y):
+    return rho * x * (1.0 - x), tau * x
 
 
 def HenonMap(a, b, x, y):
@@ -85,7 +85,6 @@ def gerador_de_sinais_logisticos(num_sinais, num_valores_por_sinal, rho_min=3.81
 
 def gerador_de_sinais_henon(num_sinais, num_valores_por_sinal, a_min=1.350, a_max=1.420, b_min=0.210, b_max=0.310,
                             x_ini=0.001, y_ini=0.001, is_plot_sinais=False):
-
     df_sinais = pd.DataFrame()
 
     for num_sinal in range(num_sinais):
@@ -121,12 +120,10 @@ def gerador_de_sinais_henon(num_sinais, num_valores_por_sinal, a_min=1.350, a_ma
 
 # início do programa principal
 if __name__ == '__main__':
-
     # ==== Entrada de dados ======================================================
     num_sinais = 30
     valores_por_sinal = 8192
     # ============================================================================
-
 
     # Para descobrir os parâmetros da curva PDF, execute o somente o trecho abaixo para encontrar melhores parametros c,
     # loc e scale, num_inicio, num_final, num_total. O prompt solicitará esses parâmtetros. Vá executando até conseguir
@@ -136,14 +133,14 @@ if __name__ == '__main__':
     # nome_arquivo = './sinais_teste.csv'
     # df_sinais = pd.read_csv(nome_arquivo)
     # while True:
-        # c = float(input("c"))
-        # loc = float(input("loc"))
-        # scale = float(input("scale"))
-        # num_inicio = float(input('num inicial'))
-        # num_final = float(input('num_final'))
-        # num_total = int(input('num_total'))
+    # c = float(input("c"))
+    # loc = float(input("loc"))
+    # scale = float(input("scale"))
+    # num_inicio = float(input('num inicial'))
+    # num_final = float(input('num_final'))
+    # num_total = int(input('num_total'))
 
-        # plot_histograma_e_gev('TIPO_SERIE', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
+    # plot_histograma_e_gev('TIPO_SERIE', df_sinais, c, loc, scale, num_inicio, num_final, num_total)
     # ========FIM=================================================================================================
 
     # Sinais Logísticos ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

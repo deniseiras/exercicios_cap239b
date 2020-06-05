@@ -45,7 +45,6 @@ from Exercicio1.exercicio1_1 import gerador_de_sinais_aleatorios
 from Exercicio1.exercicio1_2 import gerador_de_momentos
 from Exercicio1.exercicio1_3 import k_means_e_metodo_do_cotovelo
 
-
 # início do programa principal
 if __name__ == '__main__':
     # ==== Entrada de dados ======================================================

@@ -78,8 +78,8 @@ def plot_comparacao_beta(df_estatisticas, nome_arquivo_fig_alfa_x_beta, titulo, 
     fig, ax = plt.subplots()
     ax.scatter(df_estatisticas['alfa'], df_estatisticas['beta'], color='blue')
     ax.plot(np.unique(df_estatisticas['alfa']),
-             np.poly1d(np.polyfit(df_estatisticas['alfa'], df_estatisticas['beta'], 1))(
-                 np.unique(df_estatisticas['alfa'])), color='cyan', label='interpolação de {}'.format(titulo))
+            np.poly1d(np.polyfit(df_estatisticas['alfa'], df_estatisticas['beta'], 1))(
+                np.unique(df_estatisticas['alfa'])), color='cyan', label='interpolação de {}'.format(titulo))
     ax.scatter(df_estatisticas['alfa'], df_estatisticas['beta_calc'], color='red')
     ax.plot(df_estatisticas['alfa'], df_estatisticas['beta_calc'], color='magenta', label='Beta = 2 x Alfa - 1')
     plt.legend()
@@ -93,7 +93,6 @@ def plot_comparacao_beta(df_estatisticas, nome_arquivo_fig_alfa_x_beta, titulo, 
 
 # início do programa principal
 if __name__ == '__main__':
-
     # Parâmetros de entrada gerais ===================================
     is_plot_comparacao_beta = False
     nome_arquivo_todos_sinais = './todos_sinais.csv'
@@ -121,11 +120,14 @@ if __name__ == '__main__':
     # beta 0, 1, 2 = white, pink e red noises
     betas_calculados = [0, 1, 2]
     nome_arquivo_colorednoise = './colored_noise.csv'
-    df_sinais_colored_noise = gerador_de_sinais_colored_noise(num_valores_por_sinal, num_sinais, nome_arquivo_colorednoise,
+    df_sinais_colored_noise = gerador_de_sinais_colored_noise(num_valores_por_sinal, num_sinais,
+                                                              nome_arquivo_colorednoise,
                                                               betas_calculados)
-    df_estatisticas_colored_noise = calcula_df_estatistico_por_familia_e_sinal(df_sinais_colored_noise, nome_arq_tabela_estatística)
+    df_estatisticas_colored_noise = calcula_df_estatistico_por_familia_e_sinal(df_sinais_colored_noise,
+                                                                               nome_arq_tabela_estatística)
     # Verificando graficamente se as séries estão bem ajustadas à fórmula WKP: Beta = 2 x alfa – 1
-    plot_comparacao_beta(df_estatisticas_colored_noise, nome_arquivo_fig_alfa_x_beta, "Colored Noise", is_plot_comparacao_beta)
+    plot_comparacao_beta(df_estatisticas_colored_noise, nome_arquivo_fig_alfa_x_beta, "Colored Noise",
+                         is_plot_comparacao_beta)
 
     # Gerando sinais pmnoise =========================================
     nome_arq_tabela_estatística = 'estatisticas_pmnoise.csv'
@@ -154,14 +156,16 @@ if __name__ == '__main__':
     df_sinais_log = gerador_de_sinais_logisticos(num_sinais, valores_por_sinal)
     df_sinais_henon = gerador_de_sinais_henon(num_sinais, valores_por_sinal)
     df_sinais_chaosnoise = pd.concat([df_sinais_log, df_sinais_henon])
-    df_estatisticas_chaosnoise = calcula_df_estatistico_por_familia_e_sinal(df_sinais_chaosnoise, nome_arq_tabela_estatística)
+    df_estatisticas_chaosnoise = calcula_df_estatistico_por_familia_e_sinal(df_sinais_chaosnoise,
+                                                                            nome_arq_tabela_estatística)
     # Verificando graficamente se as séries estão bem ajustadas à fórmula WKP: Beta = 2 x alfa – 1
-    plot_comparacao_beta(df_estatisticas_chaosnoise, nome_arquivo_fig_alfa_x_beta, "Chaos Noise", is_plot_comparacao_beta)
+    plot_comparacao_beta(df_estatisticas_chaosnoise, nome_arquivo_fig_alfa_x_beta, "Chaos Noise",
+                         is_plot_comparacao_beta)
 
     # Criando os espaços de parâmetros EPSB-K-means: S 2 x K x β e EDF-K-means: S 2 x K x α .
-    df_todos_espacos = pd.concat([df_estatisticas_noise, df_estatisticas_colored_noise, df_estatisticas_pnoise, df_estatisticas_chaosnoise])
+    df_todos_espacos = pd.concat(
+        [df_estatisticas_noise, df_estatisticas_colored_noise, df_estatisticas_pnoise, df_estatisticas_chaosnoise])
     df_espaco_param_ESPB = df_todos_espacos[['variancia_ao_quadrado', 'curtose', 'beta']]
     df_espaco_param_ESPB.to_csv(nome_arquivo_espaco_param_ESPB, index=False)
     df_espaco_param_EDF = df_todos_espacos[['variancia_ao_quadrado', 'curtose', 'alfa']]
     df_espaco_param_EDF.to_csv(nome_arquivo_espaco_param_EDF, index=False)
-

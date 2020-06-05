@@ -47,8 +47,9 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from Exercicio4.exercicio4_2_2 import ler_serie_generica_de_arquivo_ou_url
 import pandas as pd
+
+from Exercicio4.exercicio4_2_2 import ler_serie_generica_de_arquivo_ou_url
 
 
 def calcula_media_dia(n_nb7, n_k, num_dias_para_media, indice_atual):
@@ -73,7 +74,7 @@ def calcula_g_estrategia(n_nb7, n_k, t, estrategia_g='Media', g_fixo=None, prob_
                          fator_n_max=None, g_atual=None):
     if estrategia_g == 'Media':
         n_k_t = n_k[t]
-        n_nb7_t = n_nb7[t-1]
+        n_nb7_t = n_nb7[t - 1]
         if n_k_t > n_nb7_t:
             # formula 6
             g = n_nb7_t / n_k_t
@@ -87,7 +88,7 @@ def calcula_g_estrategia(n_nb7, n_k, t, estrategia_g='Media', g_fixo=None, prob_
         g = g_fixo
     elif estrategia_g == 'Ajuste':
         n_k_t = n_k[t]
-        n_nb7_t = n_nb7[t-1]
+        n_nb7_t = n_nb7[t - 1]
         n8_min = calcula_extremos(prob_agent, fator_n_min, n_k_t, g_atual)
         n8_max = calcula_extremos(prob_agent, fator_n_max, n_k_t, g_atual)
         n_k_t_ajuste = (n8_min + n8_max) / 2
@@ -246,7 +247,6 @@ if __name__ == '__main__':
             g0 = g[espectro_a_executar][t]
             # calcula média móvel, para amanhã, dos últimos dias
             calcula_media_dia(n_nb7, n_k, num_dias_para_media, t + 1)
-
 
         # plot previsto e media
         fig = plt.figure(figsize=(16, 9))

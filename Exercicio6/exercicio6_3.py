@@ -14,10 +14,12 @@
 
 import os
 import shutil
-from Exercicio6.specplus import dfa1d
+
 import pandas as pd
+
 from Exercicio1.exercicio1_3 import k_means_e_metodo_do_cotovelo
 from Exercicio4.exercicio4_2_2 import ler_serie_generica_de_arquivo_ou_url
+from Exercicio6.specplus import dfa1d
 
 
 def calcula_df_estatistico(df_covid, coluna_agrupadora_covid, grupos_a_rejeitar, coluna_serie_covid):
@@ -53,7 +55,8 @@ def serie_no_espaco_param(df_covid, coluna_agrupadora_covid, grupos_a_rejeitar, 
     k_means_e_metodo_do_cotovelo(nome_arq_momentos_estat_dummy, k_array, metodos_do_cotovelo, is_plotar_kmeans)
     for k in k_array:
         shutil.move('./k_{}.png'.format(k), './{}_k_{}.png'.format(label_espaco_param, k))
-        shutil.move('./silhueta_yellowbrick__k_{}.png'.format(k), './silhueta_yellowbrick__{}_k_{}.png'.format(label_espaco_param, k))
+        shutil.move('./silhueta_yellowbrick__k_{}.png'.format(k),
+                    './silhueta_yellowbrick__{}_k_{}.png'.format(label_espaco_param, k))
     shutil.move('./distorcao_yellowbrick.png', './distorcao_yellowbrick__{}.png'.format(label_espaco_param))
     os.remove(nome_arq_momentos_estat_dummy)
 

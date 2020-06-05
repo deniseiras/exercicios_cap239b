@@ -52,7 +52,9 @@ from yellowbrick.cluster import SilhouetteVisualizer
 def analisador_k_means(df_momentos_familias, np_elem_norm, k, is_plotar, is_plotar_momentos_3d=True):
     kmeans = KMeans(n_clusters=int(k), random_state=0)
     kmeans.fit(np_elem_norm)
-    print(' CLUSTERS KMEANS K={} ==============================================================================='.format(k))
+    print(
+        ' CLUSTERS KMEANS K={} ==============================================================================='.format(
+            k))
     print(kmeans.cluster_centers_)
     df_momentos_familias['classes'] = kmeans.labels_
     try:

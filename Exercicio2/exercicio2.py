@@ -54,10 +54,11 @@
 # - arquivo com gráficos do cotovelo, silhueta ou outros, de nome definidos pelo nome do método + ".png", gerado em 3.
 
 
+import pandas as pd
+
+import Exercicio2.colorednoise as cn
 from Exercicio1.exercicio1_2 import gerador_de_momentos
 from Exercicio1.exercicio1_3 import k_means_e_metodo_do_cotovelo
-import Exercicio2.colorednoise as cn
-import pandas as pd
 
 
 def gerador_de_sinais_colored_noise(num_valores_por_sinal, num_sinais, nome_arquivo_colorednoise, betas,

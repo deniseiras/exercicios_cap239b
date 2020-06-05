@@ -49,7 +49,7 @@
 #   EDF.
 
 import shutil
-import os
+
 import pandas as pd
 
 from Exercicio1.exercicio1_3 import k_means_e_metodo_do_cotovelo

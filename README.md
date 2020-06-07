@@ -1,4 +1,7 @@
-# Lista de Exercícios e Prova de Matemática Computacional\nParte B. Professor Reinaldo Rosa. 2020
+# Lista de Exercícios e Prova de Matemática Computacional Parte B.
+## Professor Reinaldo Rosa. Primeiro período de 2020
+
+## Aluno: Denis M.A.Eiras
 
 ### Exercícios
 

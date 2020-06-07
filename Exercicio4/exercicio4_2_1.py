@@ -35,8 +35,9 @@ from matplotlib import pyplot as plt
 from scipy.stats import genextreme
 
 
-def plot_histograma_e_gev(str_fam_sinal, df_sinais, c, loc, scale, num_inicio, num_final, num_total):
-    arr_valores_atuais = df_sinais['valor'].to_numpy()
+def plot_histograma_e_gev(str_fam_sinal, df_sinais, c, loc, scale, num_inicio, num_final, num_total,
+                          nome_coluna='valor'):
+    arr_valores_atuais = df_sinais[nome_coluna].to_numpy()
     histogram, bins_edge = np.histogram(arr_valores_atuais, bins=20)
 
     width = 0.7 * (bins_edge[1] - bins_edge[0])

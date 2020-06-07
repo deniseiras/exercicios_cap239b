@@ -1,4 +1,4 @@
-# Matemática Computacional I - parte B - Prova - Branch Direita - COVID
+# Matemática Computacional I - parte A - Prova - Branch Direita - Modelo COVID
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # 1o período 2020
@@ -37,19 +37,14 @@
 # - nome_arq_covid_completo: (String) Nome do arquivo da covid a salvar. Ex: './owid-covid-data.csv'
 #
 # Saídas
-# - Figura contendo as previsões, os dados observados e as médias para cada espectro de probabilidades.
-# - Figura contendo o fator de supressão
-#
-# Arquivo
-
+# - Uma figura contendo o fator de supressão e o fator g, dos espectros definidos
+# - Uma figura para cada espectro de probabilidades, contendo as previsões, os dados observados e as médias
 #
 
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
-from Exercicio4.exercicio4_2_2 import ler_serie_generica_de_arquivo_ou_url
 
 
 def calcula_media_dia(n_nb7, n_k, num_dias_para_media, indice_atual):
@@ -65,7 +60,7 @@ def inicializa_medias_e_g_no_periodo(g_espectro_inicial, n_nb7, n_k, num_dias_pa
         g_espectro_inicial[t] = calcula_g_estrategia(n_nb7, n_k, t, estrategia_g, g_fixo, prob_agent,
                                                      fator_n_min, fator_n_max,
                                                      g_atual)
-        print(" Para casos = {}, media = {} ====> g = {}".format(n_k[t], n_nb7[t], g))
+        print(" Para casos = {}, media = {} ====> g = {}".format(n_k[t], n_nb7[t], g_espectro_inicial[t]))
 
     return n_nb7, g_espectro_inicial
 
@@ -114,113 +109,65 @@ def calcula_extremos(prob_agent, fator_n_min, n_k_t, g):
     return n8
 
 
-# início do programa principal
-if __name__ == '__main__':
-
-    # Parâmetros de entrada ===========================================================================================
-
-    coluna_agrupadora_covid = 'location'
-    coluna_serie_covid = 'new_cases'
-    coluna_data = 'date'
-
-    # Rodada prova
-    valor_coluna_agrupador = 'Bolivia'
-    num_dias_para_media = 7
-    data_inicial = '2020-05-09'
-    data_final = '2020-06-05'
-    data_inicial_previsao = '2020-05-16'
-
-    N = 20
-    # Estratégias => Media, Fixo, Ajuste
-    estrategia_g = 'Ajuste'
-    # Estratégias => Media , Fixo, Ajuste. Média faz mais sentido com casos reais
-    estrategia_g_inicializacao = 'Media'
-    g_fixo = 0.25
-    g0 = 0.2  # 0.2 0.5 0.8
-
-    prob_agent = {'Espectro 1': [0.5, 0.45, 0.05], 'Espectro 2': [0.7, 0.25, 0.05]}
-
-    fator_n_min = [2.0, 4.0, 5.0]
-    fator_n_max = [4.0, 7.0, 10.0]
-
-    is_atualizar_arquivo_covid = False
-    url_owid_covid_data = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
-    # nome arquivo covid a salvar
-    nome_arq_covid_completo = './owid-covid-data.csv'
-
-    # =================================================================================================================
-
-    # obtém dados da covid
-    if is_atualizar_arquivo_covid:
-        df_covid_completo = ler_serie_generica_de_arquivo_ou_url(url_owid_covid_data, is_obter_csv_como_dataframe=True,
-                                                                 is_url=True)
-    else:
-        df_covid_completo = ler_serie_generica_de_arquivo_ou_url(nome_arq_covid_completo,
-                                                                 is_obter_csv_como_dataframe=True)
-    df_covid_completo = df_covid_completo[[coluna_agrupadora_covid, coluna_data, coluna_serie_covid]]
-    is_pais = df_covid_completo[coluna_agrupadora_covid] == valor_coluna_agrupador
-    df_covid_pais = df_covid_completo[is_pais]
-    df_covid_pais_date = pd.DataFrame()
-    df_covid_pais_date[coluna_data] = pd.to_datetime(df_covid_pais[coluna_data])
-
-    # casos reais
-    mascara_data = (df_covid_pais_date[coluna_data] >= data_inicial) & (
-            df_covid_pais_date[coluna_data] <= data_final)
-    df_covid_pais_real = df_covid_pais.loc[mascara_data]
-
+def executa_branch_direita(d):
     # dias de inicialização
-    mascara_data = (df_covid_pais_date[coluna_data] >= data_inicial) & (
-            df_covid_pais_date[coluna_data] < data_inicial_previsao)
-    df_covid_pais_datas_inicializacao = df_covid_pais.loc[mascara_data]
+    df_covid_pais_date = pd.DataFrame()
+    df_covid_pais_date[d.coluna_data] = pd.to_datetime(d.df_covid_pais_real[d.coluna_data])
+
+    mascara_data = (df_covid_pais_date[d.coluna_data] >= d.data_inicial) & (
+            df_covid_pais_date[d.coluna_data] < d.data_inicial_previsao)
+    df_covid_pais_datas_inicializacao = d.df_covid_pais_real.loc[mascara_data]
     num_dias_inicializacao = len(df_covid_pais_datas_inicializacao)
 
     s = {}
     g = {}
-    for espectro in prob_agent.keys():
+    for espectro in d.prob_agent.keys():
         # dicionario de fator de supressão, por espectro
-        s[espectro] = [0.0] * (N + num_dias_inicializacao + 1)
+        s[espectro] = [0.0] * (d.N + num_dias_inicializacao + 1)
         # dicionario de fator g, por espectro
-        g[espectro] = [0.0] * (N + num_dias_inicializacao + 1)
+        g[espectro] = [0.0] * (d.N + num_dias_inicializacao + 1)
 
-    n_k_real = df_covid_pais_real[coluna_serie_covid].to_list()
+    n_k_real = d.df_covid_pais_real[d.coluna_serie_covid].to_list()
 
     # executa para cada espectro de probabilidades
-    for espectro_a_executar in prob_agent.keys():
+    for espectro_a_executar in d.prob_agent.keys():
         # normalizacao
-        prob_agent_norm = np.array(prob_agent[espectro_a_executar]) / np.sum(prob_agent[espectro_a_executar])
+        prob_agent_norm = np.array(d.prob_agent[espectro_a_executar]) / np.sum(d.prob_agent[espectro_a_executar])
 
         # número de casos no dia - depois são adicionados os dias de inicialização no início da lista
-        n_k = [0.0] * (N + 1)
-        n_k = df_covid_pais_datas_inicializacao[coluna_serie_covid].to_list() + n_k
+        n_k = [0.0] * (d.N + 1)
+        n_k = df_covid_pais_datas_inicializacao[d.coluna_serie_covid].to_list() + n_k
 
         # média de "num_dias_para_media" dias no dia
-        n_nb7 = [0.0] * (N + 1 + num_dias_inicializacao)
+        n_nb7 = [0.0] * (d.N + 1 + num_dias_inicializacao)
         # inicializa médias e g com estrategia de inicializacao
         n_nb7[0] = n_k[0]
+        g0 = d.g0
         n_nb7, g[espectro_a_executar] = inicializa_medias_e_g_no_periodo(g[espectro_a_executar], n_nb7, n_k,
-                                                                         num_dias_para_media, 1,
+                                                                         d.num_dias_para_media, 1,
                                                                          num_dias_inicializacao - 1,
-                                                                         estrategia_g=estrategia_g_inicializacao,
-                                                                         g_fixo=g_fixo, prob_agent=prob_agent_norm,
-                                                                         fator_n_min=fator_n_min,
-                                                                         fator_n_max=fator_n_max, g_atual=g0)
+                                                                         estrategia_g=d.estrategia_g_inicializacao,
+                                                                         g_fixo=d.g_fixo, prob_agent=prob_agent_norm,
+                                                                         fator_n_min=d.fator_n_min,
+                                                                         fator_n_max=d.fator_n_max,
+                                                                         g_atual=g0)
         # loop t = ultimo dia de caso real até data_final
-        for t in range(num_dias_inicializacao - 1, N + num_dias_inicializacao):
+        for t in range(num_dias_inicializacao - 1, d.N + num_dias_inicializacao):
 
             print('Previsão de hoje + {} dias ... ~~~~~~~~~~~~~~~~~~~~~~~~~~~'.format(t - num_dias_inicializacao + 1))
-            print('{} = {}'.format(coluna_serie_covid, n_k[t]))
+            print('{} = {}'.format(d.coluna_serie_covid, n_k[t]))
 
             # calcula g de acordo com a estrategia
-            g[espectro_a_executar][t] = calcula_g_estrategia(n_nb7, n_k, t, estrategia_g=estrategia_g,
-                                                             g_fixo=g_fixo,
-                                                             prob_agent=prob_agent_norm, fator_n_min=fator_n_min,
-                                                             fator_n_max=fator_n_max,
+            g[espectro_a_executar][t] = calcula_g_estrategia(n_nb7, n_k, t, estrategia_g=d.estrategia_g,
+                                                             g_fixo=d.g_fixo,
+                                                             prob_agent=prob_agent_norm, fator_n_min=d.fator_n_min,
+                                                             fator_n_max=d.fator_n_max,
                                                              g_atual=g0)
 
             # Calculando o valor minimo do intervalo
-            n8_min = calcula_extremos(prob_agent_norm, fator_n_min, n_k[t], g[espectro_a_executar][t])
+            n8_min = calcula_extremos(prob_agent_norm, d.fator_n_min, n_k[t], g[espectro_a_executar][t])
             # Calculando o valor maximo do intervalo
-            n8_max = calcula_extremos(prob_agent_norm, fator_n_max, n_k[t], g[espectro_a_executar][t])
+            n8_max = calcula_extremos(prob_agent_norm, d.fator_n_max, n_k[t], g[espectro_a_executar][t])
 
             # Calculando delta_g ...
             q_g = (1 - g[espectro_a_executar][t]) ** 2
@@ -238,7 +185,7 @@ if __name__ == '__main__':
             print('g0 = {}, g = {} , delta_g = {}'.format(g0, g[espectro_a_executar][t], delta_g))
             print('Mín de casos = {}'.format(n8_min))
             print('Máx de casos = {}'.format(n8_max))
-            print('Média dos últimos {} dias = {}'.format(num_dias_para_media, n_nb7[t]))
+            print('Média dos últimos {} dias = {}'.format(d.num_dias_para_media, n_nb7[t]))
             print('Fator de supressão s = {}'.format(s[espectro_a_executar][t]))
             print('')
 
@@ -246,47 +193,55 @@ if __name__ == '__main__':
             n_k[t + 1] = (n8_min + n8_max) / 2
             g0 = g[espectro_a_executar][t]
             # calcula média móvel, para amanhã, dos últimos dias
-            calcula_media_dia(n_nb7, n_k, num_dias_para_media, t + 1)
+            calcula_media_dia(n_nb7, n_k, d.num_dias_para_media, t + 1)
 
-        # plot previsto e media
-        fig = plt.figure(figsize=(16, 9))
-        plt.errorbar(range(len(n_k)), n_k, yerr=abs((np.array(n_k) - np.array(n_k_real))), ecolor='black',
-                     label=espectro_a_executar)
-        # plt.bar(range(len(n_k)), n_k, yerr=abs((np.array(n_k) - np.array(n_k_real))), label=espectro_a_executar)
+        # plot erro
+        plt.figure(figsize=(16, 9))
+        len_min_prev_real = min(len(n_k), len(n_k_real))
+        err_prev_real = abs((np.array(n_k[0:len_min_prev_real]) - np.array(n_k_real[0:len_min_prev_real])))
+        plt.errorbar(range(len(n_k[0:len_min_prev_real])), n_k[0:len_min_prev_real], yerr=err_prev_real,
+                     ecolor='black')
+        # plot previsto
+        plt.plot(range(len(n_k)), n_k, label=espectro_a_executar)
+        # plot media
         plt.plot(range(len(n_nb7)), n_nb7, alpha=1, color='magenta', label='{} - Média'.format(espectro_a_executar))
 
-        # plot real ( + previsto + media )
+        # plot real
         plt.plot(range(len(n_k_real)), n_k_real, alpha=1, color='orange', label='Observado')
-        label_serie = coluna_serie_covid.capitalize()
-        label_estrategia = estrategia_g if estrategia_g != 'Fixo' else '{}={}'.format(estrategia_g, g_fixo)
-        titulo = '{} {} - Espectro: {}\nEstratégia g: {} - Dias de média: {} \nPeriodo:{}/{} - Inicio Prev: {} ({} dias)'.format(
-            valor_coluna_agrupador, label_serie, espectro_a_executar, label_estrategia, num_dias_para_media,
-            data_inicial, data_final, data_inicial_previsao, N)
+        label_serie = d.coluna_serie_covid.capitalize()
+        label_estrategia = d.estrategia_g if d.estrategia_g != 'Fixo' else '{}={}'.format(d.estrategia_g, d.g_fixo)
+        titulo = '{} {} - Espectro: {}\nEstratégia g: {} - Dias de média: {} ' \
+                 '\nPeriodo:{}/{} - Inicio Prev: {} ({} dias)'.format(d.valor_coluna_agrupador, label_serie,
+                                                                      espectro_a_executar, label_estrategia,
+                                                                      d.num_dias_para_media, d.data_inicial,
+                                                                      d.data_final, d.data_inicial_previsao, d.N)
         plt.title(titulo)
         plt.xlabel('dias')
         plt.ylabel(label_serie)
         plt.legend()
         plt.savefig(
-            './previsao_{}_espctro_{}_estrateg_{}_diasMedia_{}.png'.format(valor_coluna_agrupador, espectro_a_executar,
-                                                                           estrategia_g, num_dias_para_media))
+            './previsao_{}_espctro_{}_estrateg_{}_diasMedia_{}.png'.format(d.valor_coluna_agrupador,
+                                                                           espectro_a_executar,
+                                                                           d.estrategia_g, d.num_dias_para_media))
         plt.show()
 
     # plot Fator de Supressão e g
-    fig = plt.figure(figsize=(16, 9))
+    plt.figure(figsize=(16, 9))
     for espectro in s.keys():
         # plot s
         plt.plot(range(len(s[espectro])), s[espectro], label='s Espectro {}'.format(espectro))
         plt.plot(range(len(g[espectro])), g[espectro], label='g Espectro {}'.format(espectro))
 
-    label_serie = coluna_serie_covid.capitalize()
-    label_estrategia = estrategia_g if estrategia_g != 'Fixo' else '{}={}'.format(estrategia_g, g_fixo)
+    label_serie = d.coluna_serie_covid.capitalize()
+    label_estrategia = d.estrategia_g if d.estrategia_g != 'Fixo' else '{}={}'.format(d.estrategia_g, d.g_fixo)
     titulo = '{} {} - Estratégia g: {} - Dias de média: {} \nPeriodo:{}/{} - Inicio Prev: {} ({} dias)'.format(
-        valor_coluna_agrupador, label_serie,
-        label_estrategia, num_dias_para_media, data_inicial, data_final, data_inicial_previsao, N)
+        d.valor_coluna_agrupador, label_serie,
+        label_estrategia, d.num_dias_para_media, d.data_inicial, d.data_final, d.data_inicial_previsao, d.N)
     plt.title(titulo)
     plt.xlabel('dias')
     plt.ylabel('Fator de Supressão e g')
     plt.legend()
     plt.savefig(
-        './supressao_{}_estrateg_{}_diasMedia_{}.png'.format(valor_coluna_agrupador, estrategia_g, num_dias_para_media))
+        './supressao_{}_estrateg_{}_diasMedia_{}.png'.format(d.valor_coluna_agrupador, d.estrategia_g,
+                                                             d.num_dias_para_media))
     plt.show()

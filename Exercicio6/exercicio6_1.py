@@ -40,7 +40,7 @@ from Exercicio1.exercicio1_1 import gerador_de_sinais_aleatorios
 from Exercicio2.exercicio2 import gerador_de_sinais_colored_noise
 from Exercicio3.exercicio3 import gerador_de_sinais_pmodel
 from Exercicio5.exercicio5_1 import gerador_de_sinais_logisticos, gerador_de_sinais_henon
-from Exercicio6.specplus import psd, dfa1d
+from Codigos.Specplus import psd, dfa1d
 
 
 def calcula_df_estatistico_por_familia_e_sinal(df_sinais, nome_arq_tabela_estatística):
@@ -64,7 +64,7 @@ def calcula_df_estatistico(valores):
     df = pd.DataFrame()
     df['variancia_ao_quadrado'] = pd.Series(valores.var() ** 2)
     df['curtose'] = valores.kurtosis()
-    freqs, power, xdata, ydata, amp, index, powerlaw, INICIO, FIM = psd(valores)
+    freqs, power, xdata, ydata, amp, index, INICIO, FIM = psd(valores)
     beta = index
     df['beta'] = beta
     alfa, vetoutput, x, y, reta, erro = dfa1d(valores, 1)

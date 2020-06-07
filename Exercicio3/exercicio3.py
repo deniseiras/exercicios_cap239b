@@ -67,7 +67,7 @@ import pandas as pd
 
 from Exercicio1.exercicio1_2 import gerador_de_momentos
 from Exercicio1.exercicio1_3 import k_means_e_metodo_do_cotovelo
-from Exercicio3.pmodel import pmodel
+from Codigos.pmodel import pmodel
 
 
 def gerador_de_sinais_pmodel(num_valores_por_sinal, beta, arr_p, num_sinais):

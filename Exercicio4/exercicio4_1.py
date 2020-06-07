@@ -26,7 +26,7 @@
 #
 
 from Exercicio3.exercicio3 import gerador_de_sinais_pmodel
-from Exercicio4.cullen_frey_andre_from_R import graph
+from Codigos.cullen_frey_andre_from_R import graph
 
 # início do programa principal
 if __name__ == '__main__':

@@ -19,7 +19,7 @@ import pandas as pd
 
 from Exercicio1.exercicio1_3 import k_means_e_metodo_do_cotovelo
 from Exercicio4.exercicio4_2_2 import ler_serie_generica_de_arquivo_ou_url
-from Exercicio6.specplus import dfa1d
+from Codigos.Specplus import dfa1d
 
 
 def calcula_df_estatistico(df_covid, coluna_agrupadora_covid, grupos_a_rejeitar, coluna_serie_covid):

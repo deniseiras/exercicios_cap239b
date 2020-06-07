@@ -35,7 +35,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from Exercicio4.cullen_frey_andre_from_R import graph
+from Codigos.cullen_frey_andre_from_R import graph
 from Exercicio4.exercicio4_2_1 import plot_histograma_e_gev
 
 

@@ -56,7 +56,7 @@ def executa_branch_esquerda(d):
     # (plot 1) - Mostrar o histograma
     str_compl_titulo = '{} de COVID-19 de {}'.format(d.coluna_serie_covid.capitalize(), d.valor_coluna_agrupador)
     arr_valores = d.df_covid_pais_real[d.coluna_serie_covid].to_numpy()
-    histogram, bins_edge = np.histogram(arr_valores, bins=20)
+    histogram, bins_edge = np.histogram(arr_valores, bins=100)
     width = 0.7 * (bins_edge[1] - bins_edge[0])
     center = (bins_edge[:-1] + bins_edge[1:]) / 2
     plt.bar(center, histogram, align='center', width=width)

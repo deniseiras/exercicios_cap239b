@@ -63,8 +63,15 @@ def analisador_k_means(df_momentos_familias, np_elem_norm, k, is_plotar, is_plot
         if is_plotar:
             plt.show()
         plt.close('all')
-    except:
-        pass
+    except Exception as re:
+        if str(re).startswith('Selected KDE bandwidth is 0. Cannot estiamte density'):
+            grid = sb.pairplot(df_momentos_familias, hue='classes', kde_kws={'bw': 0.1})
+            grid.savefig("./k_{}.png".format(k))
+            if is_plotar:
+                plt.show()
+            plt.close('all')
+        else:
+            raise re
 
     if is_plotar_momentos_3d:
         fig1 = plt.figure()

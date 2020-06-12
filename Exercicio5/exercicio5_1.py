@@ -11,12 +11,18 @@
 # variar o b. Pode fixar o b=0.300 e variar o a. Ou variar ambos dentro de um critério de passo ou aleatoriamente.
 # Aplique as respectivas analises estatísticas dos exercícios 4.1 e 4.2. Total do Grupo chaosnoise: 60
 #
-# Entradas:
+# Entradas
 #
+# - num_valores_por_sinal: (Array de inteiros) Cada elemento representa uma quantidade de valores do sinal de uma
+#   família.
+# - num_sinais: (Inteiro) Número de sinais gerados por família.
 #
-# Saídas:
-##
+# Saída
 #
+# - Arquivos contendo os sinais logístivos e de Henon
+# - Arquivo com análise de Cullen Frey, por tipo de sinal
+# - Arquivo com plot da PDF sobre o histograma, por tipo de sinal
+
 # Observações
 #
 # Utilização dos programas:

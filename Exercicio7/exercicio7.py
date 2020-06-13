@@ -57,7 +57,6 @@ def espectro_de_singularidades_todos(dic_df_sinais, is_plot_sing=False):
 
 def get_stat_mfmda(valores):
     [_, _, _, stats, _] = getMSSByUpscaling(valores, isNormalised=0)
-    # [_, _, _, stats, _] = getMSSByUpscaling(valores, normType=0, isNormalised=0)
     return stats
 
 

@@ -23,15 +23,15 @@
 # TODO - Ler JSON, XML, EXCEL
 
 import numpy as np
+import mimetypes
+import pandas as pd
+import magic
+import os
+from urllib.parse import urlparse
+import requests
 
 
 def ler_serie_generica_de_arquivo_ou_url(nome_arquivo_ou_url, is_url=False, is_obter_csv_como_dataframe=False):
-    import mimetypes
-    import pandas as pd
-    import magic
-    import os
-    from urllib.parse import urlparse
-    import requests
 
     if is_url:
         a = urlparse(nome_arquivo_ou_url)

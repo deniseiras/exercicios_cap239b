@@ -64,6 +64,9 @@ def serie_no_espaco_param(df_covid, coluna_agrupadora_covid, grupos_a_rejeitar, 
 # início do programa principal
 if __name__ == '__main__':
 
+
+
+    # TODO DATAS DA COVID
     # Parâmetros de entrada ===========================================================================================
     k_array = range(2, 21)
     metodos_do_cotovelo = ['distorcao_yellowbrick', 'silhueta_yellowbrick']

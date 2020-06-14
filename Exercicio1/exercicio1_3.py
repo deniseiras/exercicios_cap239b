@@ -105,8 +105,10 @@ def k_means_e_metodo_do_cotovelo(nome_arq_saida_todos_momentos, k_array, metodos
 
     # método distorcao_km_inertia - soma das distâncias ao quadrado
     soma_das_dist_ao_quadrado = []
+    arr_kmeans = []
     for cada_k in k_array:
         k_means_model = analisador_k_means(df_momentos_familias, np_elem_norm, cada_k, is_plotar, is_plotar_momentos_3d)
+        arr_kmeans.append(k_means_model)
         soma_das_dist_ao_quadrado.append(k_means_model.inertia_)
         if "silhueta_yellowbrick" in metodos_do_cotovelo:
             visualizer = SilhouetteVisualizer(k_means_model, colors='yellowbrick')
@@ -130,6 +132,7 @@ def k_means_e_metodo_do_cotovelo(nome_arq_saida_todos_momentos, k_array, metodos
             visualizer = KElbowVisualizer(kmeans, k=k_array, metric='distortion')
             visualizer.fit(np_elem_norm)  # Fit the data to the visualizer
             plt.savefig("./{}.png".format(metodo_do_cotovelo))
+            melhor_k = visualizer.elbow_value_
             if is_plotar:
                 visualizer.show()
         elif metodo_do_cotovelo == "calinski_harabasz_yellowbrick":
@@ -140,3 +143,5 @@ def k_means_e_metodo_do_cotovelo(nome_arq_saida_todos_momentos, k_array, metodos
             if is_plotar:
                 visualizer.show()
         plt.close('all')
+
+    return arr_kmeans, melhor_k

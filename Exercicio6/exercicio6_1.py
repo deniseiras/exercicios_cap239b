@@ -40,7 +40,19 @@ from Exercicio1.exercicio1_1 import gerador_de_sinais_aleatorios
 from Exercicio2.exercicio2 import gerador_de_sinais_colored_noise
 from Exercicio3.exercicio3 import gerador_de_sinais_pmodel
 from Exercicio5.exercicio5_1 import gerador_de_sinais_logisticos, gerador_de_sinais_henon
-from Codigos.Specplus import psd, dfa1d
+from Codigos.specplus import psd, dfa1d
+
+
+def corrigir_valores_estatisticos_invalidos(df_todas_series):
+    df_todas_series.replace('', np.nan, inplace=True)
+    df_todas_series.replace(np.inf, np.nan, inplace=True)
+    df_todas_series.replace(-np.inf, np.nan, inplace=True)
+    df_todas_series.dropna(inplace=True)
+
+
+def normalizar_valor(df, coluna):
+    df[coluna] = (df[coluna] - df[coluna].min()) / (df[coluna].max() - df[coluna].min())
+    return df
 
 
 def calcula_df_estatistico_por_familia_e_sinal(df_sinais, nome_arq_tabela_estatística):
@@ -56,13 +68,16 @@ def calcula_df_estatistico_por_familia_e_sinal(df_sinais, nome_arq_tabela_estat�
             df = calcula_df_estatistico(valores)
             df_stats = pd.concat([df_stats, df])
 
+    corrigir_valores_estatisticos_invalidos(df_stats)
+    df_stats = normalizar_valor(df_stats, 'assimetria_ao_quadrado')
+    df_stats = normalizar_valor(df_stats, 'curtose')
     df_stats.to_csv(nome_arq_tabela_estatística, index=False)
     return df_stats
 
 
 def calcula_df_estatistico(valores):
     df = pd.DataFrame()
-    df['variancia_ao_quadrado'] = pd.Series(valores.var() ** 2)
+    df['assimetria_ao_quadrado'] = pd.Series(valores.skew() ** 2)
     df['curtose'] = valores.kurtosis()
     freqs, power, xdata, ydata, amp, index, INICIO, FIM = psd(valores)
     beta = index
@@ -165,7 +180,7 @@ if __name__ == '__main__':
     # Criando os espaços de parâmetros EPSB-K-means: S 2 x K x β e EDF-K-means: S 2 x K x α .
     df_todos_espacos = pd.concat(
         [df_estatisticas_noise, df_estatisticas_colored_noise, df_estatisticas_pnoise, df_estatisticas_chaosnoise])
-    df_espaco_param_ESPB = df_todos_espacos[['variancia_ao_quadrado', 'curtose', 'beta']]
+    df_espaco_param_ESPB = df_todos_espacos[['assimetria_ao_quadrado', 'curtose', 'beta']]
     df_espaco_param_ESPB.to_csv(nome_arquivo_espaco_param_ESPB, index=False)
-    df_espaco_param_EDF = df_todos_espacos[['variancia_ao_quadrado', 'curtose', 'alfa']]
+    df_espaco_param_EDF = df_todos_espacos[['assimetria_ao_quadrado', 'curtose', 'alfa']]
     df_espaco_param_EDF.to_csv(nome_arquivo_espaco_param_EDF, index=False)

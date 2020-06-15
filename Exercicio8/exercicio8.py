@@ -38,8 +38,8 @@ class DadosConfigCovid:
         self.nome_arq_covid_completo = './owid-covid-data.csv'
 
 
-def main():
-    # Henon map not used as it causes issues with the waipy module.
+# Sample execution:
+if __name__ == '__main__':
 
     # serie covid_ndc =================================================================================================
     dados_covid = DadosConfigCovid('USA', '2020-03-10', '2020-05-28')
@@ -69,9 +69,3 @@ def main():
             waipy.wavelet_plot('{}_DOG'.format(label_serie), np.linspace(0, len(data), len(data)), data, 0.03125, result)
         except Exception as e:
             plt.close('all')
-
-
-# Sample execution:
-if __name__ == '__main__':
-
-    main()
